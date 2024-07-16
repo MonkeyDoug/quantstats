@@ -836,6 +836,40 @@ def rolling_volatility(
     if not show:
         return fig
 
+def rolling_correlation(
+    returns,
+    benchmark=None,
+    period=126,
+    period_label="6-Months",
+    periods_per_year=252,
+    lw=1.5,
+    fontname="Arial",
+    grayscale=False,
+    figsize=(10, 3),
+    ylabel="Volatility",
+    subtitle=True,
+    savefig=None,
+    show=True,
+):
+
+    returns = _stats.rolling_correlation(returns, benchmark, period, periods_per_year, prepare_returns=False)
+
+    fig = _core.plot_rolling_stats(
+        returns,
+        hline=returns.mean(),
+        hlw=1.5,
+        ylabel=ylabel,
+        title="Rolling Correlation (%s)" % period_label,
+        fontname=fontname,
+        grayscale=grayscale,
+        lw=lw,
+        figsize=figsize,
+        subtitle=subtitle,
+        savefig=savefig,
+        show=show,
+    )
+    if not show:
+        return fig
 
 def rolling_sharpe(
     returns,
