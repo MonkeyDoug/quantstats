@@ -1253,6 +1253,7 @@ def plot_longest_drawdowns(
 
 def plot_distribution(
     returns,
+    return_interval,
     figsize=(10, 6),
     fontname="Arial",
     grayscale=False,
@@ -1270,21 +1271,24 @@ def plot_distribution(
     # colors, ls, alpha = _get_colors(grayscale)
 
     port = _pd.DataFrame(returns.fillna(0))
-    port.columns = ["Daily"]
+    resample_column = return_interval
+    port.columns = [resample_column]
 
     apply_fnc = _stats.comp if compounded else _np.sum
 
-    port["Weekly"] = port["Daily"].resample("W-MON").apply(apply_fnc)
-    port["Weekly"].ffill(inplace=True)
+    if return_interval == "Daily":
 
-    port["Monthly"] = port["Daily"].resample("M").apply(apply_fnc)
-    port["Monthly"].ffill(inplace=True)
+        port["Weekly"] = port[resample_column].resample("W-MON").apply(apply_fnc).ffill()
+        # port["Weekly"].ffill(inplace=True)
 
-    port["Quarterly"] = port["Daily"].resample("Q").apply(apply_fnc)
-    port["Quarterly"].ffill(inplace=True)
+        port["Monthly"] = port[resample_column].resample("M").apply(apply_fnc).ffill()
+        # port["Monthly"].ffill(inplace=True)
 
-    port["Yearly"] = port["Daily"].resample("A").apply(apply_fnc)
-    port["Yearly"].ffill(inplace=True)
+    port["Quarterly"] = port[resample_column].resample("Q").apply(apply_fnc).ffill()
+    # port["Quarterly"].ffill(inplace=True)
+
+    port["Yearly"] = port[resample_column].resample("A").apply(apply_fnc).ffill()
+    # port["Yearly"].ffill(inplace=True)
 
     fig, ax = _plt.subplots(figsize=figsize)
     ax.spines["top"].set_visible(False)
