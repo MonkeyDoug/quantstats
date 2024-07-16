@@ -1085,7 +1085,7 @@ def plot_rolling_beta(
     )
     mmin = min([-100, int(beta_min * 100)])
     mmax = max([100, int(beta_max * 100)])
-    step = 50 if (mmax - mmin) >= 200 else 100
+    step = ( mmax - mmin ) // 10
     ax.set_yticks([x / 100 for x in list(range(mmin, mmax, step))])
 
     if isinstance(returns, _pd.Series):
