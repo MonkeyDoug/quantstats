@@ -344,6 +344,22 @@ def html(
     tpl = tpl.replace("{{rolling_vol}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
+    _plots.rolling_return(
+        returns,
+        benchmark,
+        grayscale=grayscale,
+        figsize=figsize,
+        subtitle=False,
+        savefig={"fname": figfile, "format": figfmt},
+        show=False,
+        ylabel=False,
+        period=rolling_period,
+        period_label=rolling_period_label,
+        periods_per_year=win_year,
+    )
+    tpl = tpl.replace("{{rolling_ret}}", _embed_figure(figfile, figfmt))
+
+    figfile = _utils._file_stream()
     _plots.rolling_sharpe(
         returns,
         grayscale=grayscale,
@@ -1401,6 +1417,19 @@ def plots(
         ylabel=False,
         period=rolling_period,
         period_label=rolling_period_label,
+    )
+
+    _plots.rolling_return(
+        returns,
+        benchmark,
+        grayscale=grayscale,
+        figsize=figsize,
+        subtitle=False,
+        show=False,
+        ylabel=False,
+        period=rolling_period,
+        period_label=rolling_period_label,
+        periods_per_year=win_year,
     )
 
     _plots.rolling_sharpe(
