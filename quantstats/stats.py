@@ -242,7 +242,18 @@ def rolling_volatility(
 
     return returns.rolling(rolling_period).std() * _np.sqrt(periods_per_year)
 
+def rolling_correlation(
+    returns, benchmark, rolling_period=126, periods_per_year=252, prepare_returns=True
+):
+    if prepare_returns:
+        returns = _utils._prepare_returns(returns, rolling_period)
+        benchmark = _utils._prepare_returns(benchmark, rolling_period)
 
+    def corr(returns, benchmark):
+        relevant = benchmark.loc[returns.index]
+        return returns.corr(relevant)
+
+    return returns.rolling(rolling_period).apply(corr, args=(benchmark, ))
 def implied_volatility(returns, periods=252, annualize=True):
     """Calculates the implied volatility of returns for a period"""
     logret = _utils.log_returns(returns)
