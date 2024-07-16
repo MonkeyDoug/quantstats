@@ -1060,6 +1060,37 @@ def monthly_heatmap(
     return None
 
 
+def upside_downside(
+    returns,
+    benchmark,
+    fontname="Arial",
+    grayscale=False,
+    figsize=(10, 5),
+    ylabel=True,
+    subtitle=True,
+    savefig=None,
+    show=True,
+    prepare_returns=True,
+):
+
+    if prepare_returns:
+        if benchmark is not None:
+            benchmark = _utils._prepare_benchmark(benchmark, returns.index)
+        returns = _utils._prepare_returns(returns)
+
+    return _core.plot_upside_downside(
+        returns,
+        benchmark,
+        fontname=fontname,
+        grayscale=grayscale,
+        figsize=figsize,
+        ylabel=ylabel,
+        subtitle=subtitle,
+        savefig=savefig,
+        show=show,
+    )
+
+
 def monthly_returns(
     returns,
     annot_size=10,
