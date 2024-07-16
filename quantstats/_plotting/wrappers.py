@@ -592,6 +592,7 @@ def yearly_returns(
 
 def distribution(
     returns,
+    return_interval,
     fontname="Arial",
     grayscale=False,
     ylabel=True,
@@ -608,6 +609,7 @@ def distribution(
 
     fig = _core.plot_distribution(
         returns,
+        return_interval,
         fontname=fontname,
         grayscale=grayscale,
         figsize=figsize,
