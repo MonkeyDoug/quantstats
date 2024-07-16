@@ -508,6 +508,7 @@ def log_returns(
 def daily_returns(
     returns,
     benchmark,
+    return_interval,
     grayscale=False,
     figsize=(10, 4),
     fontname="Arial",
@@ -527,7 +528,8 @@ def daily_returns(
             benchmark = _utils._prepare_returns(benchmark)
             returns = returns - benchmark
 
-    plot_title = "Daily Active Returns" if active else "Daily Returns"
+    plot_title = " Active Returns" if active else " Returns"
+    plot_title = return_interval + plot_title
 
     fig = _core.plot_timeseries(
         returns,
@@ -536,7 +538,7 @@ def daily_returns(
         ylabel=ylabel,
         match_volatility=False,
         log_scale=log_scale,
-        resample="D",
+        resample="D" if return_interval == "Daily" else "M",
         compound=False,
         lw=lw,
         figsize=figsize,
