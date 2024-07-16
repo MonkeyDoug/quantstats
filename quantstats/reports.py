@@ -341,6 +341,24 @@ def html(
             prepare_returns=False,
         )
         tpl = tpl.replace("{{upside_downside}}", _embed_figure(figfile, figfmt))
+
+    if benchmark is not None:
+        figfile = _utils._file_stream()
+        _plots.rolling_correlation(
+            returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            savefig={"fname": figfile, "format": figfmt},
+            show=False,
+            ylabel=False,
+            period=rolling_period,
+            period_label=rolling_period_label,
+            periods_per_year=win_year,
+        )
+        tpl = tpl.replace("{{rolling_corr}}", _embed_figure(figfile, figfmt))
+
     figfile = _utils._file_stream()
     _plots.rolling_volatility(
         returns,
@@ -1430,6 +1448,18 @@ def plots(
             show=False,
             ylabel=False,
             prepare_returns=False,
+        )
+        _plots.rolling_correlation(
+            returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            show=False,
+            ylabel=False,
+            period=rolling_period,
+            period_label=rolling_period_label,
+            periods_per_year=win_year,
         )
 
     _plots.rolling_volatility(
