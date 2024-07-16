@@ -916,7 +916,7 @@ def plot_rolling_stats(
                 df[returns_label].dropna(), lw=lw, label=returns.name, color=colors[1]
             )
         elif isinstance(returns, _pd.DataFrame):
-            df = df[returns_label].dropna()
+            df = df[returns_label].dropna(how="all")
             for i, col in enumerate(returns_label):
                 ax.plot(df[col], lw=lw, label=col, color=colors[i + 1])
 
