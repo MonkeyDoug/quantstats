@@ -388,6 +388,7 @@ def returns(
     savefig=None,
     show=True,
     prepare_returns=True,
+    separate_axes=None,
 ):
 
     title = "Cumulative Returns" if compound else "Returns"
