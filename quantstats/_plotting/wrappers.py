@@ -404,24 +404,45 @@ def returns(
     if prepare_returns:
         returns = _utils._prepare_returns(returns)
 
-    fig = _core.plot_timeseries(
-        returns,
-        benchmark,
-        title,
-        ylabel=ylabel,
-        match_volatility=match_volatility,
-        log_scale=False,
-        resample=resample,
-        compound=compound,
-        cumulative=cumulative,
-        lw=lw,
-        figsize=figsize,
-        fontname=fontname,
-        grayscale=grayscale,
-        subtitle=subtitle,
-        savefig=savefig,
-        show=show,
-    )
+    if separate_axes is None:
+        fig = _core.plot_timeseries(
+            returns,
+            benchmark,
+            title,
+            ylabel=ylabel,
+            match_volatility=match_volatility,
+            log_scale=False,
+            resample=resample,
+            compound=compound,
+            cumulative=cumulative,
+            lw=lw,
+            figsize=figsize,
+            fontname=fontname,
+            grayscale=grayscale,
+            subtitle=subtitle,
+            savefig=savefig,
+            show=show,
+        )
+    else:
+        fig = _core.plot_timeseries_twin_axis(
+            returns,
+            benchmark,
+            title,
+            ylabel=ylabel,
+            match_volatility=match_volatility,
+            log_scale=False,
+            resample=resample,
+            compound=compound,
+            cumulative=cumulative,
+            lw=lw,
+            figsize=figsize,
+            fontname=fontname,
+            grayscale=grayscale,
+            subtitle=subtitle,
+            savefig=savefig,
+            show=show,
+            separate_axes=separate_axes,
+        )
     if not show:
         return fig
 
