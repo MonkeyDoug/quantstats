@@ -134,6 +134,7 @@ def html(
         prepare_returns=False,
         benchmark_title=benchmark_title,
         strategy_title=strategy_title,
+        match_dates=match_dates
     )[2:]
 
     mtrx.index.name = "Metric"
@@ -562,6 +563,7 @@ def full(
                 prepare_returns=False,
                 benchmark_title=benchmark_title,
                 strategy_title=strategy_title,
+                match_dates=match_dates
             )
         )
 
@@ -598,6 +600,7 @@ def full(
             prepare_returns=False,
             benchmark_title=benchmark_title,
             strategy_title=strategy_title,
+            match_dates=match_dates
         )
         print("\n\n")
         print("[Worst 5 Drawdowns]\n")
@@ -636,6 +639,7 @@ def full(
         benchmark_title=benchmark_title,
         strategy_title=strategy_title,
         active=active,
+        match_dates=match_dates
     )
 
 
@@ -715,6 +719,7 @@ def basic(
         benchmark_title=benchmark_title,
         strategy_title=strategy_title,
         active=active,
+        match_dates=match_dates
     )
 
 
