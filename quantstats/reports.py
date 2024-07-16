@@ -67,6 +67,7 @@ def html(
     rolling_period=None,
     rolling_period_label=None,
     figsize=(8, 5),
+    return_interval="Daily",
     **kwargs,
 ):
 
@@ -296,6 +297,7 @@ def html(
     _plots.daily_returns(
         returns,
         benchmark,
+        return_interval,
         grayscale=grayscale,
         figsize=figsize,
         subtitle=False,
@@ -456,6 +458,7 @@ def html(
     if isinstance(returns, _pd.Series):
         _plots.distribution(
             returns,
+            return_interval,
             grayscale=grayscale,
             figsize=figsize,
             subtitle=False,
@@ -472,6 +475,7 @@ def html(
         for col in returns.columns:
             _plots.distribution(
                 returns[col],
+                return_interval,
                 grayscale=grayscale,
                 figsize=figsize,
                 subtitle=False,
@@ -649,6 +653,7 @@ def full(
         benchmark_title=benchmark_title,
         strategy_title=strategy_title,
         active=active,
+        return_interval=return_interval,
         rolling_period=rolling_period,
         rolling_period_label=rolling_period_label,
         match_dates=match_dates
@@ -1227,6 +1232,7 @@ def plots(
     periods_per_year=252,
     prepare_returns=True,
     match_dates=True,
+    return_interval="Daily",
     rolling_period=None,
     rolling_period_label=None,
     **kwargs,
@@ -1363,6 +1369,7 @@ def plots(
     _plots.daily_returns(
         returns,
         benchmark,
+        return_interval,
         grayscale=grayscale,
         figsize=small_fig_size,
         show=True,
@@ -1473,6 +1480,7 @@ def plots(
     if isinstance(returns, _pd.Series):
         _plots.distribution(
             returns,
+            return_interval,
             grayscale=grayscale,
             figsize=(figsize[0], figsize[0] * 0.5),
             show=True,
@@ -1484,6 +1492,7 @@ def plots(
         for col in returns.columns:
             _plots.distribution(
                 returns[col],
+                return_interval,
                 grayscale=grayscale,
                 figsize=(figsize[0], figsize[0] * 0.5),
                 show=True,
