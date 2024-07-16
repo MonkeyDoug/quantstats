@@ -68,6 +68,7 @@ def html(
     rolling_period_label=None,
     figsize=(8, 5),
     return_interval="Daily",
+    separate_axes=None,
     **kwargs,
 ):
 
@@ -228,6 +229,7 @@ def html(
         ylabel=False,
         cumulative=compounded,
         prepare_returns=False,
+        separate_axes=separate_axes
     )
     tpl = tpl.replace("{{returns}}", _embed_figure(figfile, figfmt))
 
@@ -560,6 +562,7 @@ def full(
     periods_per_year=252,
     match_dates=True,
     return_interval="Daily",
+    separate_axes=None,
     rolling_period=None,
     rolling_period_label=None,
     **kwargs,
@@ -702,6 +705,7 @@ def full(
         strategy_title=strategy_title,
         active=active,
         return_interval=return_interval,
+        separate_axes=separate_axes,
         rolling_period=rolling_period,
         rolling_period_label=rolling_period_label,
         match_dates=match_dates
@@ -1281,6 +1285,7 @@ def plots(
     prepare_returns=True,
     match_dates=True,
     return_interval="Daily",
+    separate_axes=None,
     rolling_period=None,
     rolling_period_label=None,
     **kwargs,
@@ -1363,6 +1368,7 @@ def plots(
         show=True,
         ylabel=False,
         prepare_returns=False,
+        separate_axes=separate_axes
     )
 
     _plots.log_returns(
