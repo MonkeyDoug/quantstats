@@ -64,6 +64,8 @@ def html(
     figfmt="svg",
     template_path=None,
     match_dates=True,
+    rolling_period=None,
+    rolling_period_label=None,
     figsize=(8, 5),
     **kwargs,
 ):
@@ -332,7 +334,8 @@ def html(
         savefig={"fname": figfile, "format": figfmt},
         show=False,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
         periods_per_year=win_year,
     )
     tpl = tpl.replace("{{rolling_vol}}", _embed_figure(figfile, figfmt))
@@ -346,7 +349,8 @@ def html(
         savefig={"fname": figfile, "format": figfmt},
         show=False,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
         periods_per_year=win_year,
     )
     tpl = tpl.replace("{{rolling_sharpe}}", _embed_figure(figfile, figfmt))
@@ -360,7 +364,8 @@ def html(
         savefig={"fname": figfile, "format": figfmt},
         show=False,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
         periods_per_year=win_year,
     )
     tpl = tpl.replace("{{rolling_sortino}}", _embed_figure(figfile, figfmt))
@@ -502,6 +507,8 @@ def full(
     periods_per_year=252,
     match_dates=True,
     return_interval="Daily",
+    rolling_period=None,
+    rolling_period_label=None,
     **kwargs,
 ):
 
@@ -641,6 +648,8 @@ def full(
         benchmark_title=benchmark_title,
         strategy_title=strategy_title,
         active=active,
+        rolling_period=rolling_period,
+        rolling_period_label=rolling_period_label,
         match_dates=match_dates
     )
 
@@ -1217,6 +1226,8 @@ def plots(
     periods_per_year=252,
     prepare_returns=True,
     match_dates=True,
+    rolling_period=None,
+    rolling_period_label=None,
     **kwargs,
 ):
 
@@ -1379,7 +1390,8 @@ def plots(
         figsize=small_fig_size,
         show=True,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
     )
 
     _plots.rolling_sharpe(
@@ -1388,7 +1400,8 @@ def plots(
         figsize=small_fig_size,
         show=True,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
     )
 
     _plots.rolling_sortino(
@@ -1397,7 +1410,8 @@ def plots(
         figsize=small_fig_size,
         show=True,
         ylabel=False,
-        period=win_half_year,
+        period=rolling_period,
+        period_label=rolling_period_label,
     )
 
     if isinstance(returns, _pd.Series):
