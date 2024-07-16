@@ -29,6 +29,7 @@ import matplotlib.dates as _mdates
 from matplotlib.ticker import (
     FormatStrFormatter as _FormatStrFormatter,
     FuncFormatter as _FuncFormatter,
+    LinearLocator as _LinearLocator
 )
 
 import pandas as _pd
@@ -402,6 +403,180 @@ def plot_timeseries(
 
     return None
 
+def plot_timeseries_twin_axis(
+    returns,
+    benchmark=None,
+    title="Returns",
+    compound=False,
+    cumulative=True,
+    fill=False,
+    returns_label="Strategy",
+    hline=None,
+    hlw=None,
+    hlcolor="red",
+    hllabel="",
+    percent=True,
+    match_volatility=False,
+    log_scale=False,
+    resample=None,
+    lw=1.5,
+    figsize=(10, 6),
+    ylabel="",
+    grayscale=False,
+    fontname="Arial",
+    subtitle=True,
+    savefig=None,
+    show=True,
+    separate_axes=None
+):
+
+    colors, ls, alpha = _get_colors(grayscale)
+
+    returns.fillna(0, inplace=True)
+    if isinstance(benchmark, _pd.Series):
+        benchmark.fillna(0, inplace=True)
+
+    if match_volatility and benchmark is None:
+        raise ValueError("match_volatility requires passing of " "benchmark.")
+    if match_volatility and benchmark is not None:
+        bmark_vol = benchmark.std()
+        returns = (returns / returns.std()) * bmark_vol
+
+    # ---------------
+    if compound is True:
+        if cumulative:
+            returns = _stats.compsum(returns)
+            if isinstance(benchmark, _pd.Series):
+                benchmark = _stats.compsum(benchmark)
+        else:
+            returns = returns.cumsum()
+            if isinstance(benchmark, _pd.Series):
+                benchmark = benchmark.cumsum()
+
+    if resample:
+        returns = returns.resample(resample)
+        returns = returns.last() if compound is True else returns.sum()
+        if isinstance(benchmark, _pd.Series):
+            benchmark = benchmark.resample(resample)
+            benchmark = benchmark.last() if compound is True else benchmark.sum()
+    # ---------------
+
+    fig, ax = _plt.subplots(figsize=figsize)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+
+    fig.suptitle(
+        title, y=0.94, fontweight="bold", fontname=fontname, fontsize=14, color="black"
+    )
+
+    if subtitle:
+        ax.set_title(
+            "%s - %s            \n"
+            % (
+                returns.index.date[:1][0].strftime("%e %b '%y"),
+                returns.index.date[-1:][0].strftime("%e %b '%y"),
+            ),
+            fontsize=12,
+            color="gray",
+        )
+
+    fig.set_facecolor("white")
+    ax.set_facecolor("white")
+
+    ax2 = ax.twinx()
+
+    if isinstance(benchmark, _pd.Series):
+        (ax2 if "benchmark" in separate_axes else ax).plot(benchmark, lw=lw, ls=ls, label=benchmark.name, color=colors[0])
+
+    alpha = 0.25 if grayscale else 1
+    if isinstance(returns, _pd.Series):
+        ax.plot(returns, lw=lw, label=returns.name, color=colors[1], alpha=alpha)
+    elif isinstance(returns, _pd.DataFrame):
+        # color_dict = {col: colors[i+1] for i, col in enumerate(returns.columns)}
+        for i, col in enumerate(returns.columns):
+            (ax2 if col in separate_axes else ax).plot(returns[col], lw=lw, label=col, alpha=alpha, color=colors[i + 1])
+
+    if fill:
+        if isinstance(returns, _pd.Series):
+            ax.fill_between(returns.index, 0, returns, color=colors[1], alpha=0.25)
+        elif isinstance(returns, _pd.DataFrame):
+            for i, col in enumerate(returns.columns):
+                (ax2 if col in separate_axes else ax).fill_between(
+                    returns[col].index, 0, returns[col], color=colors[i + 1], alpha=0.25
+                )
+
+    # rotate and align the tick labels so they look better
+    fig.autofmt_xdate()
+
+    # use a more precise date string for the x axis locations in the toolbar
+    # ax.fmt_xdata = _mdates.DateFormatter('%Y-%m-%d')
+
+    if hline is not None:
+        if not isinstance(hline, _pd.Series):
+            if grayscale:
+                hlcolor = "black"
+            ax.axhline(hline, ls="--", lw=hlw, color=hlcolor, label=hllabel, zorder=2)
+
+    ax.axhline(0, ls="-", lw=1, color="gray", zorder=1)
+    ax.axhline(0, ls="--", lw=1, color="white" if grayscale else "black", zorder=2)
+
+    # if isinstance(benchmark, _pd.Series) or hline is not None:
+    # ax.legend(fontsize=11)
+    # ax2.legend(fontsize=11)
+
+    _plt.yscale("symlog" if log_scale else "linear")
+
+    if percent:
+        ax.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
+        ax2.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
+        # ax.yaxis.set_major_formatter(_plt.FuncFormatter(
+        #     lambda x, loc: "{:,}%".format(int(x*100))))
+
+    ax.set_xlabel("")
+    if ylabel:
+        ax.set_ylabel(
+            ylabel, fontname=fontname, fontweight="bold", fontsize=12, color="black"
+        )
+    lines1, labels1 = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    labels1 = [f"left: {label}" for label in labels1]
+    labels2 = [f"right: {label}" for label in labels2]
+    ax.legend(lines1 + lines2, labels1 + labels2, loc='best', fontsize=11)
+    ax.yaxis.set_label_coords(-0.1, 0.5)
+
+    ax.yaxis.set_major_locator(_LinearLocator())
+    ax2.yaxis.set_major_locator(_LinearLocator())
+
+    if benchmark is None and len(_pd.DataFrame(returns).columns) == 1:
+        ax.get_legend().remove()
+
+    try:
+        _plt.subplots_adjust(hspace=0, bottom=0, top=1)
+    except Exception:
+        pass
+
+    try:
+        fig.tight_layout()
+    except Exception:
+        pass
+
+    if savefig:
+        if isinstance(savefig, dict):
+            _plt.savefig(**savefig)
+        else:
+            _plt.savefig(savefig)
+
+    if show:
+        _plt.show(block=False)
+
+    _plt.close()
+
+    if not show:
+        return fig
+
+    return None
 
 def plot_histogram(
     returns,
