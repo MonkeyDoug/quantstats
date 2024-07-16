@@ -327,6 +327,20 @@ def html(
         )
         tpl = tpl.replace("{{rolling_beta}}", _embed_figure(figfile, figfmt))
 
+    if benchmark is not None:
+        figfile = _utils._file_stream()
+        _plots.upside_downside(
+            returns,
+            benchmark,
+            savefig={"fname": figfile, "format": figfmt},
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            show=False,
+            ylabel=False,
+            prepare_returns=False,
+        )
+        tpl = tpl.replace("{{upside_downside}}", _embed_figure(figfile, figfmt))
     figfile = _utils._file_stream()
     _plots.rolling_volatility(
         returns,
@@ -1404,6 +1418,16 @@ def plots(
             window2=None,
             figsize=small_fig_size,
             show=True,
+            ylabel=False,
+            prepare_returns=False,
+        )
+        _plots.upside_downside(
+            returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            show=False,
             ylabel=False,
             prepare_returns=False,
         )
