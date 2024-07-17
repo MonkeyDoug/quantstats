@@ -1279,16 +1279,12 @@ def plot_distribution(
     if return_interval == "Daily":
 
         port["Weekly"] = port[resample_column].resample("W-MON").apply(apply_fnc).ffill()
-        # port["Weekly"].ffill(inplace=True)
 
-        port["Monthly"] = port[resample_column].resample("M").apply(apply_fnc).ffill()
-        # port["Monthly"].ffill(inplace=True)
+        port["Monthly"] = port[resample_column].resample("ME").apply(apply_fnc).ffill()
 
-    port["Quarterly"] = port[resample_column].resample("Q").apply(apply_fnc).ffill()
-    # port["Quarterly"].ffill(inplace=True)
+    port["Quarterly"] = port[resample_column].resample("QE").apply(apply_fnc).ffill()
 
-    port["Yearly"] = port[resample_column].resample("A").apply(apply_fnc).ffill()
-    # port["Yearly"].ffill(inplace=True)
+    port["Yearly"] = port[resample_column].resample("AE").apply(apply_fnc).ffill()
 
     fig, ax = _plt.subplots(figsize=figsize)
     ax.spines["top"].set_visible(False)

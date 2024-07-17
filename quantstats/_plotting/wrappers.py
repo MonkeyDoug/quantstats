@@ -538,7 +538,7 @@ def daily_returns(
         ylabel=ylabel,
         match_volatility=False,
         log_scale=log_scale,
-        resample="D" if return_interval == "Daily" else "M",
+        resample="D" if return_interval == "Daily" else "ME",
         compound=False,
         lw=lw,
         figsize=figsize,
