@@ -133,10 +133,10 @@ def plot_upside_downside(
         mean_fund_up_returns = fund_returns[fund_returns > 0].mean()
         mean_fund_down_returns = fund_returns[fund_returns < 0].mean()
         b = ax1.bar(i + 1, mean_fund_up_returns, alpha=alpha, color=colors[i + 1])
-        ax1.bar_label(b, labels=[f"{mean_fund_up_returns:.2%}\n({(mean_fund_up_returns / mean_benchmark_up_returns / 100):.2%})"], label_type="edge")
+        ax1.bar_label(b, labels=[f"{mean_fund_up_returns:.2%}\n({(mean_fund_up_returns / mean_benchmark_up_returns):.2%})"], label_type="edge")
         b.set_label(col)
         b = ax2.bar(i + 1, mean_fund_down_returns, alpha=alpha, color=colors[i + 1])
-        ax2.bar_label(b, labels=[f"{mean_fund_down_returns:.2%}\n({(mean_fund_down_returns / mean_benchmark_down_returns / 100):.2%})"], label_type="edge")
+        ax2.bar_label(b, labels=[f"{mean_fund_down_returns:.2%}\n({(mean_fund_down_returns / mean_benchmark_down_returns):.2%})"], label_type="edge")
 
     for ax in [ax1, ax2]:
         ax.spines["top"].set_visible(False)
