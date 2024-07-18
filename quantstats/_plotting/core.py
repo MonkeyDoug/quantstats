@@ -103,7 +103,8 @@ def plot_upside_downside(
     subtitle=True,
     savefig=None,
     show=True,
-    percent=True
+    percent=True,
+    rotation_degree=55
 ):
     colors, ls, alpha = _get_colors(grayscale)
 
@@ -120,23 +121,26 @@ def plot_upside_downside(
 
     alpha = 0.25 if grayscale else 1
 
-    mean_benchmark_up_returns = benchmark[benchmark > 0].mean()
-    mean_benchmark_down_returns = benchmark[benchmark < 0].mean()
+    benchmark_up_dates = benchmark[benchmark > 0].index
+    benchmark_down_dates = benchmark[benchmark < 0].index
+    mean_benchmark_up_returns = benchmark.loc[benchmark_up_dates].mean()
+    mean_benchmark_down_returns = benchmark.loc[benchmark_down_dates].mean()
     b = ax1.bar(0, mean_benchmark_up_returns, alpha=alpha, color=colors[0])
-    ax1.bar_label(b, labels=[f"{mean_benchmark_up_returns:.2%}"], fmt='{:.2f}%', label_type="edge")
+    ax1.bar_label(b, labels=[f"{mean_benchmark_up_returns:.2%}"], fmt='{:.2f}%', label_type="edge", rotation=rotation_degree)
     b.set_label(benchmark.name)
     b = ax2.bar(0, mean_benchmark_down_returns, alpha=alpha, color=colors[0])
-    ax2.bar_label(b, labels=[f"{mean_benchmark_down_returns:.2%}"], fmt='{:.2f}%', label_type="edge")
+    ax2.bar_label(b, labels=[f"{mean_benchmark_down_returns:.2%}"], fmt='{:.2f}%', label_type="edge", rotation=rotation_degree)
 
     for i, col in enumerate(returns.columns):
         fund_returns = returns[col]
-        mean_fund_up_returns = fund_returns[fund_returns > 0].mean()
-        mean_fund_down_returns = fund_returns[fund_returns < 0].mean()
-        b = ax1.bar(i + 1, mean_fund_up_returns, alpha=alpha, color=colors[i + 1])
-        ax1.bar_label(b, labels=[f"{mean_fund_up_returns:.2%}\n({(mean_fund_up_returns / mean_benchmark_up_returns):.2%})"], label_type="edge")
-        b.set_label(col)
+        fund_up_dates = benchmark_up_dates.intersection(fund_returns.index)
+        fund_down_dates = benchmark_down_dates.intersection(fund_returns.index)
+        mean_fund_up_returns = fund_returns[fund_up_dates].mean()
+        mean_fund_down_returns = fund_returns[fund_down_dates].mean()
+        b = ax1.bar(i + 1, mean_fund_up_returns, alpha=alpha, color=colors[i + 1], label=rf"{col}: {(mean_fund_up_returns / mean_benchmark_up_returns):.2%} / {(mean_fund_down_returns / mean_benchmark_down_returns):.2%}")
+        ax1.bar_label(b, labels=[f"{mean_fund_up_returns:.2%}"], label_type="edge", rotation=rotation_degree)
         b = ax2.bar(i + 1, mean_fund_down_returns, alpha=alpha, color=colors[i + 1])
-        ax2.bar_label(b, labels=[f"{mean_fund_down_returns:.2%}\n({(mean_fund_down_returns / mean_benchmark_down_returns):.2%})"], label_type="edge")
+        ax2.bar_label(b, labels=[f"{mean_fund_down_returns:.2%}"], label_type="edge", rotation=rotation_degree)
 
     for ax in [ax1, ax2]:
         ax.spines["top"].set_visible(False)
@@ -148,12 +152,15 @@ def plot_upside_downside(
 
     ax1.legend(loc="lower left", fontsize=11)
 
+    _plt.figtext(0.5, 0.01, 'Note: left for upside capture, right for downside capture', 
+            fontsize=10, ha='center', va='bottom')
+
     if percent:
         ax1.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
         ax2.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
 
     try:
-        _plt.subplots_adjust(hspace=0, bottom=0, top=1)
+        _plt.subplots_adjust(hspace=0, bottom=0.05, top=0.95)
     except Exception:
         pass
 
