@@ -185,7 +185,7 @@ def plot_returns_bars(
     hlw=None,
     hlcolor="red",
     hllabel="",
-    resample="A",
+    resample="YE",
     title="Returns",
     match_volatility=False,
     log_scale=False,
@@ -665,7 +665,7 @@ def plot_timeseries_twin_axis(
 def plot_histogram(
     returns,
     benchmark,
-    resample="M",
+    resample="ME",
     bins=20,
     fontname="Arial",
     grayscale=False,
@@ -1284,7 +1284,7 @@ def plot_distribution(
 
     port["Quarterly"] = port[resample_column].resample("QE").apply(apply_fnc).ffill()
 
-    port["Yearly"] = port[resample_column].resample("AE").apply(apply_fnc).ffill()
+    port["Yearly"] = port[resample_column].resample("YE").apply(apply_fnc).ffill()
 
     fig, ax = _plt.subplots(figsize=figsize)
     ax.spines["top"].set_visible(False)
