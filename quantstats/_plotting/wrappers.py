@@ -405,7 +405,7 @@ def returns(
     if prepare_returns:
         returns = _utils._prepare_returns(returns)
 
-    if separate_axes is None:
+    if separate_axes is None or len(separate_axes) == 0:
         fig = _core.plot_timeseries(
             returns,
             benchmark,
