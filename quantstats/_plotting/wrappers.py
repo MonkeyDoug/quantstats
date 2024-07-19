@@ -38,7 +38,7 @@ from .. import (
 from . import core as _core
 
 
-_FLATUI_COLORS = ["#fedd78", "#348dc1", "#af4b64", "#4fa487", "#9b59b6", "#808080"]
+_FLATUI_COLORS = _plt.cm.tab20.colors
 _GRAYSCALE_COLORS = (len(_FLATUI_COLORS) * ["black"]) + ["white"]
 
 _HAS_PLOTLY = False

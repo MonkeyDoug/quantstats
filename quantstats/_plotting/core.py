@@ -56,18 +56,6 @@ _sns.set(
     },
 )
 
-# _FLATUI_COLORS = [
-#     "#FEDD78",
-#     "#348DC1",
-#     "#BA516B",
-#     "#4FA487",
-#     "#9B59B6",
-#     "#613F66",
-#     "#84B082",
-#     "#DC136C",
-#     "#559CAD",
-#     "#4A5899",
-# ]
 _FLATUI_COLORS = _plt.cm.tab20.colors
 _GRAYSCALE_COLORS = [
     "#000000",
