@@ -80,13 +80,15 @@ def snapshot(
     if isinstance(returns, _pd.Series):
         returns.name = strategy_colname
     elif isinstance(returns, _pd.DataFrame):
-        if len(returns.columns) > 1:
-            if strategy_colname in returns.columns:
-                returns = returns[strategy_colname]
-            else:
+        if strategy_colname in returns.columns:
+            returns = returns[strategy_colname]
+        else:
+            if len(returns.columns) > 1:
                 multi_column = True
                 returns = returns.mean(axis=1)
                 title = title + " (daily equal-weighted*)"
+            else:
+                returns = returns.iloc[:, 0]
         returns.columns = strategy_colname
 
     colors = _GRAYSCALE_COLORS if grayscale else _FLATUI_COLORS
