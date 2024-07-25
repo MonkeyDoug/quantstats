@@ -119,6 +119,8 @@ def plot_upside_downside(
     b = ax2.bar(0, mean_benchmark_down_returns, alpha=alpha, color=colors[0])
     ax2.bar_label(b, labels=[f"{mean_benchmark_down_returns:.2%}"], fmt='{:.2f}%', label_type="edge", rotation=rotation_degree)
 
+    if isinstance(returns, _pd.Series): returns = returns.to_frame()
+
     for i, col in enumerate(returns.columns):
         fund_returns = returns[col]
         fund_up_dates = benchmark_up_dates.intersection(fund_returns.index)
