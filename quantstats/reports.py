@@ -1603,7 +1603,7 @@ def _calc_dd(df, display=True, as_pct=False):
     # to match multiple columns like returns_1, returns_2, ...
     elif (
         any(dd_info.columns.get_level_values(0).str.contains("returns"))
-        and dd_info.columns.get_level_values(0).nunique() > 1
+        and dd_info.columns.nlevels > 1
     ):
         ret_dd = dd_info.loc[
             :, dd_info.columns.get_level_values(0).str.contains("returns")
@@ -1613,7 +1613,7 @@ def _calc_dd(df, display=True, as_pct=False):
 
     if (
         any(ret_dd.columns.get_level_values(0).str.contains("returns"))
-        and ret_dd.columns.get_level_values(0).nunique() > 1
+        and ret_dd.columns.nlevels > 1
     ):
         dd_stats = {
             col: {
