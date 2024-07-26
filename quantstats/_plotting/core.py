@@ -1484,5 +1484,8 @@ def format_pct_axis(x, _):
     if x >= 1e3:
         res = "%1.1fK%%" % (x * 1e-3)
         return res.replace(".0K%", "K%")
-    res = "%1.0f%%" % x
+    if x >= 10:
+        res = "%1.0f%%" % x
+        return res.replace(".0%", "%")
+    res = "%1.1f%%" % x
     return res.replace(".0%", "%")
