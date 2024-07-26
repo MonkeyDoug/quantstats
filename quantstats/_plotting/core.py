@@ -1472,19 +1472,20 @@ def format_cur_axis(x, _):
 
 def format_pct_axis(x, _):
     x *= 100  # lambda x, loc: "{:,}%".format(int(x * 100))
-    if x >= 1e12:
+    compare_x = abs(x)
+    if compare_x >= 1e12:
         res = "%1.1fT%%" % (x * 1e-12)
         return res.replace(".0T%", "T%")
-    if x >= 1e9:
+    if compare_x >= 1e9:
         res = "%1.1fB%%" % (x * 1e-9)
         return res.replace(".0B%", "B%")
-    if x >= 1e6:
+    if compare_x >= 1e6:
         res = "%1.1fM%%" % (x * 1e-6)
         return res.replace(".0M%", "M%")
-    if x >= 1e3:
+    if compare_x >= 1e3:
         res = "%1.1fK%%" % (x * 1e-3)
         return res.replace(".0K%", "K%")
-    if x >= 10:
+    if compare_x >= 10:
         res = "%1.0f%%" % x
         return res.replace(".0%", "%")
     res = "%1.1f%%" % x
