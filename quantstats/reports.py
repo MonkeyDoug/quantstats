@@ -53,6 +53,7 @@ def _match_dates(returns, benchmark):
 
 def html(
     returns,
+    leverage_adjusted_returns=None,
     benchmark=None,
     rf=0.0,
     grayscale=False,
@@ -232,6 +233,22 @@ def html(
         separate_axes=separate_axes
     )
     tpl = tpl.replace("{{returns}}", _embed_figure(figfile, figfmt))
+    if leverage_adjusted_returns is not None:
+        figfile = _utils._file_stream()
+        _plots.returns(
+            leverage_adjusted_returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            savefig={"fname": figfile, "format": figfmt},
+            show=False,
+            ylabel= "Cumulative " if compounded else "" + "Leverage Adjusted Returns",
+            cumulative=compounded,
+            prepare_returns=False,
+            separate_axes=separate_axes
+        )
+        tpl = tpl.replace("{{leverage_adjusted_returns}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
     _plots.log_returns(
@@ -279,6 +296,22 @@ def html(
         prepare_returns=False,
     )
     tpl = tpl.replace("{{eoy_returns}}", _embed_figure(figfile, figfmt))
+
+    if leverage_adjusted_returns is not None:
+        figfile = _utils._file_stream()
+        _plots.yearly_returns(
+            leverage_adjusted_returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            subtitle=False,
+            savefig={"fname": figfile, "format": figfmt},
+            show=False,
+            ylabel="Leverage Adjusted Returns",
+            compounded=compounded,
+            prepare_returns=False,
+        )
+        tpl = tpl.replace("{{leverage_adjusted_eoy_returns}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
     _plots.histogram(
@@ -343,6 +376,20 @@ def html(
             prepare_returns=False,
         )
         tpl = tpl.replace("{{upside_downside}}", _embed_figure(figfile, figfmt))
+        if leverage_adjusted_returns is not None:
+            figfile = _utils._file_stream()
+            _plots.upside_downside(
+                leverage_adjusted_returns,
+                benchmark,
+                savefig={"fname": figfile, "format": figfmt},
+                grayscale=grayscale,
+                figsize=figsize,
+                subtitle=False,
+                show=False,
+                ylabel="Leverage Adjusted Returns",
+                prepare_returns=False,
+            )
+            tpl = tpl.replace("{{leverage_adjusted_upside_downside}}", _embed_figure(figfile, figfmt))
 
     if benchmark is not None:
         figfile = _utils._file_stream()
@@ -553,6 +600,7 @@ def html(
 
 def full(
     returns,
+    leverage_adjusted_returns=None,
     benchmark=None,
     rf=0.0,
     grayscale=False,
@@ -708,7 +756,8 @@ def full(
         separate_axes=separate_axes,
         rolling_period=rolling_period,
         rolling_period_label=rolling_period_label,
-        match_dates=match_dates
+        match_dates=match_dates,
+        leverage_adjusted_returns=leverage_adjusted_returns
     )
 
 
@@ -1288,6 +1337,7 @@ def plots(
     separate_axes=None,
     rolling_period=None,
     rolling_period_label=None,
+    leverage_adjusted_returns=None,
     **kwargs,
 ):
 
@@ -1368,8 +1418,22 @@ def plots(
         show=True,
         ylabel=False,
         prepare_returns=False,
-        separate_axes=separate_axes
+        separate_axes=separate_axes,
+        cumulative=compounded
     )
+
+    if leverage_adjusted_returns is not None:
+        _plots.returns(
+            leverage_adjusted_returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=(figsize[0], figsize[0] * 0.6),
+            show=True,
+            ylabel=("Cumulative " if compounded else "") + "Leverage Adjusted Returns",
+            prepare_returns=False,
+            separate_axes=separate_axes,
+            cumulative=compounded
+        )
 
     _plots.log_returns(
         returns,
@@ -1402,6 +1466,18 @@ def plots(
         ylabel=False,
         prepare_returns=False,
     )
+
+    if leverage_adjusted_returns is not None:
+        _plots.yearly_returns(
+            leverage_adjusted_returns,
+            benchmark,
+            grayscale=grayscale,
+            figsize=(figsize[0], figsize[0] * 0.5),
+            show=True,
+            ylabel="Leverage Adjusted Returns",
+            compounded=compounded,
+            prepare_returns=False,
+        )
 
     _plots.histogram(
         returns,
@@ -1455,6 +1531,17 @@ def plots(
             ylabel=False,
             prepare_returns=False,
         )
+        if leverage_adjusted_returns is not None:
+            _plots.upside_downside(
+                leverage_adjusted_returns,
+                benchmark,
+                grayscale=grayscale,
+                figsize=figsize,
+                subtitle=False,
+                show=True,
+                ylabel="Leverage Adjusted Returns",
+                prepare_returns=False,
+            )
         _plots.rolling_correlation(
             returns,
             benchmark,
