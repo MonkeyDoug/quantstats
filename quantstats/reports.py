@@ -243,7 +243,7 @@ def html(
             subtitle=False,
             savefig={"fname": figfile, "format": figfmt},
             show=False,
-            ylabel= "Cumulative " if compounded else "" + "Leverage Adjusted Returns",
+            ylabel= ("Cumulative " if compounded else "") + "Leverage Adjusted Returns",
             cumulative=compounded,
             prepare_returns=False,
             separate_axes=separate_axes
@@ -259,7 +259,7 @@ def html(
                 subtitle=False,
                 savefig={"fname": figfile, "format": figfmt},
                 show=False,
-                ylabel= "Cumulative " if compounded else "" + "Leverage Adjusted Active Returns",
+                ylabel= ("Cumulative " if compounded else "") + "Leverage Adjusted Active Returns",
                 cumulative=compounded,
                 prepare_returns=False,
                 separate_axes=separate_axes
