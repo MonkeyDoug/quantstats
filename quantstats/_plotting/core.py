@@ -87,7 +87,7 @@ def plot_upside_downside(
     fontname="Arial",
     grayscale=False,
     figsize=(10, 5),
-    ylabel=True,
+    ylabel="Returns",
     subtitle=True,
     savefig=None,
     show=True,
@@ -149,6 +149,12 @@ def plot_upside_downside(
         ax1.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
         ax2.yaxis.set_major_formatter(_FuncFormatter(format_pct_axis))
 
+    if ylabel:
+        ax1.set_ylabel(
+            ylabel, fontname=fontname, fontweight="bold", fontsize=12, color="black"
+        )
+        ax1.yaxis.set_label_coords(-0.1, 0.5)
+
     try:
         _plt.subplots_adjust(hspace=0, bottom=0.05, top=0.95)
     except Exception:
@@ -189,7 +195,7 @@ def plot_returns_bars(
     figsize=(10, 6),
     grayscale=False,
     fontname="Arial",
-    ylabel=True,
+    ylabel="Returns",
     subtitle=True,
     savefig=None,
     show=True,
@@ -286,7 +292,7 @@ def plot_returns_bars(
     ax.set_xlabel("")
     if ylabel:
         ax.set_ylabel(
-            "Returns", fontname=fontname, fontweight="bold", fontsize=12, color="black"
+            ylabel, fontname=fontname, fontweight="bold", fontsize=12, color="black"
         )
         ax.yaxis.set_label_coords(-0.1, 0.5)
 
