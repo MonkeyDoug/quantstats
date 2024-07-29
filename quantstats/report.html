@@ -229,6 +229,16 @@
                   Leverage Adjusted Returns
                 </button>
               </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="pill"
+                  data-bs-target="leverage-adjusted-active-returns"
+                  type="button"
+                >
+                  Leverage Adjusted Active Returns
+                </button>
+              </li>
             </ul>
             <div class="tab-content">
               <div class="tab-pane fade show active normal-returns">
@@ -236,6 +246,9 @@
               </div>
               <div class="tab-pane fade leverage-adjusted-returns">
                 {{leverage_adjusted_returns}}
+              </div>
+              <div class="tab-pane fade leverage-adjusted-active-returns">
+                {{leverage_adjusted_active_returns}}
               </div>
             </div>
           </div>
@@ -348,9 +361,15 @@
           container.querySelector(
             '.nav-link[data-bs-target="leverage-adjusted-returns"]',
           ).style.display = "none";
-          return;
+        }
+        // Does not contain leverage adjusted active data
+        if (container.querySelector(".leverage-adjusted-active-returns svg") == null) {
+          container.querySelector(
+            '.nav-link[data-bs-target="leverage-adjusted-active-returns"]',
+          ).style.display = "none";
         }
 
+				// Set up tab pane changes when pill is clicked
         const pills = container.querySelectorAll(".nav-link");
         const panes = container.querySelectorAll(".tab-pane");
 

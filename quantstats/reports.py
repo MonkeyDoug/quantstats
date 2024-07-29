@@ -249,6 +249,22 @@ def html(
             separate_axes=separate_axes
         )
         tpl = tpl.replace("{{leverage_adjusted_returns}}", _embed_figure(figfile, figfmt))
+        if benchmark is not None:
+            figfile = _utils._file_stream()
+            _plots.returns(
+                leverage_adjusted_returns.sub(benchmark, axis=0).dropna(),
+                benchmark=None,
+                grayscale=grayscale,
+                figsize=figsize,
+                subtitle=False,
+                savefig={"fname": figfile, "format": figfmt},
+                show=False,
+                ylabel= "Cumulative " if compounded else "" + "Leverage Adjusted Active Returns",
+                cumulative=compounded,
+                prepare_returns=False,
+                separate_axes=separate_axes
+            )
+            tpl = tpl.replace("{{leverage_adjusted_active_returns}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
     _plots.log_returns(
