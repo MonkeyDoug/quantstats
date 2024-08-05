@@ -365,13 +365,19 @@
           ).style.display = "none";
         }
         // Does not contain leverage adjusted active data
-        if (container.querySelector(".leverage-adjusted-active-returns svg") == null) {
-          container.querySelector(
+        if (
+          container.querySelector(".leverage-adjusted-active-returns svg") ==
+          null
+        ) {
+          const active_returns = container.querySelector(
             '.nav-link[data-bs-target="leverage-adjusted-active-returns"]',
-          ).style.display = "none";
+          );
+          if (active_returns) {
+            active_returns.style.display = "none";
+          }
         }
 
-				// Set up tab pane changes when pill is clicked
+        // Set up tab pane changes when pill is clicked
         const pills = container.querySelectorAll(".nav-link");
         const panes = container.querySelectorAll(".tab-pane");
 
