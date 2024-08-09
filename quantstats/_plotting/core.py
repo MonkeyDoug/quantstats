@@ -1036,13 +1036,11 @@ def plot_rolling_beta(
 
     i = 1
     if isinstance(returns, _pd.Series):
-        beta = _stats.rolling_greeks(returns, benchmark, window1)["beta"].fillna(0)
+        beta = _stats.rolling_greeks(returns, benchmark, window1)["beta"].dropna()
         ax.plot(beta, lw=lw, label=window1_label, color=colors[1])
     elif isinstance(returns, _pd.DataFrame):
         beta = {
-            col: _stats.rolling_greeks(returns[col], benchmark, window1)["beta"].fillna(
-                0
-            )
+            col: _stats.rolling_greeks(returns[col], benchmark, window1)["beta"].dropna()
             for col in returns.columns
         }
         for name, b in beta.items():
@@ -1054,7 +1052,7 @@ def plot_rolling_beta(
         lw = lw - 0.5
         if isinstance(returns, _pd.Series):
             ax.plot(
-                _stats.rolling_greeks(returns, benchmark, window2)["beta"],
+                _stats.rolling_greeks(returns, benchmark, window2)["beta"].dropna(),
                 lw=lw,
                 label=window2_label,
                 color="gray",
@@ -1062,7 +1060,7 @@ def plot_rolling_beta(
             )
         elif isinstance(returns, _pd.DataFrame):
             betas_w2 = {
-                col: _stats.rolling_greeks(returns[col], benchmark, window2)["beta"]
+                col: _stats.rolling_greeks(returns[col], benchmark, window2)["beta"].dropna()
                 for col in returns.columns
             }
             for name, beta_w2 in betas_w2.items():
