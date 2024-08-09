@@ -602,6 +602,8 @@ def html(
             embed.append(figfile)
         tpl = tpl.replace("{{returns_dist}}", _embed_figure(embed, figfmt))
 
+    tpl = tpl.replace("<table>", '<table class="table table-bordered table-hover"')
+
     tpl = _regex.sub(r"\{\{(.*?)\}\}", "", tpl)
     tpl = tpl.replace("white-space:pre;", "")
 
